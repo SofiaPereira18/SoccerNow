@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <title>Soccer Now - Gestão de Campeonatos</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+
+    h1, h2 {
+      color: #333;
+    }
+
+    .container {
+      padding: 20px;
+      margin-bottom: 30px;
+      border-radius: 8px;
+    }
+
+    input, select, button {
+      margin: 10px 0;
+      padding: 8px;
+      width: 100%;
+      max-width: 400px;
+      display: block;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+
+    th, td {
+      padding: 10px;
+      border: 1px solid #ccc;
+      text-align: center;
+    }
+
+    .danger {
+      color: red;
+    }
+
+    .back-button {
+      background-color: #007BFF;
+      color: white;
+      padding: 10px;
+      margin-bottom: 5px;
+    }
+  </style>
+</head>
+<body>
+  <a href="/home" class="back-button">Página inicial</a>
+
+  <h1>Gestão de Jogos</h1>
+    <div class="filter-container">
+        <h2>Buscar por Jogos</h2>
+        <form action="/games/search" method="GET">
+            <label for="searchId">Pesquisar por ID do Jogo:</label><br>
+            <input type="number" id="searchId" name="searchId" placeholder="ID Jogo" required><br><br>
+            <button type="submit">Buscar</button>
+        </form>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Id</th>
+              <th>Equipas</th>
+              <th>Golos por Jogador</th>
+              <th>Total de golos</th>
+              <th>Localização</th>
+              <th>Turno</th>
+              <th>Estado</th>
+            </tr>
+          </thead>
+          <tbody th:each = "game : ${games}">
+              <tr th:each="team, iterStat : ${game.startingTeams}">
+                <!-- Only show game ID once, using rowspan -->
+                <td th:if="${iterStat.index == 0}" th:rowspan="${#lists.size(game.startingTeams)}" th:text="${game.id}"></td>
+
+                <!-- Team-specific -->
+                <td th:text="${team.team.name}"></td>
+
+                <td>
+                  <div th:if="${iterStat.index == 0}" th:each="entry : ${game.stats.goalsHomeTeam}">
+                    <span th:text="${players[entry.key]} + ' - ' + ${entry.value}  + ' gol(s)'"></span>
+                  </div>
+                  <div th:if="${iterStat.index != 0}" th:each="entry : ${game.stats.goalsAwayTeam}">
+                    <span th:text="${players[entry.key]} + ' - ' + ${entry.value} + ' gol(s)'"></span>
+                  </div>
+                </td>
+
+                <td th:if="${iterStat.index == 0}" th:text="${totalHomeGoals}"></td>
+                <td th:if="${iterStat.index != 0}" th:text="${totalAwayGoals}"></td>
+
+                <!-- Only show location once -->
+                <td th:if="${iterStat.index == 0}" th:rowspan="${#lists.size(game.startingTeams)}" th:text="${game.location.city + ' - ' + game.location.address}"></td>
+
+                <!-- Only show game shift once -->
+                <td th:if="${iterStat.index == 0}" th:rowspan="${#lists.size(game.startingTeams)}" th:text="${game.gameShift}"></td>
+
+                <!-- Only show game status once -->
+                <td th:if="${iterStat.index == 0}" th:rowspan="${#lists.size(game.startingTeams)}" th:text="${game.isFinished} ? 'Terminado' : 'A decorrer'"></td>
+              </tr>
+            </tbody>
+        </table>
+        <div th:each="game : ${games}" th:if="${game!=null && !game.isFinished}" class="danger">
+            <h2>Adicionar golo</h2>
+            <form action="/games/addGoal">
+              <label for="team">Equipas</label>
+              <select id="team" name="team">
+                <option value="">Selecione</option>
+                <option th:each="st : ${game.startingTeams}"
+                        th:value="${st.id}"
+                        th:text="${st.team.name}"></option>
+              </select>
+
+              <label for="player">Jogador</label>
+              <select id="player" name="player">
+                <option value="">Selecione uma equipa primeiro</option>
+              </select>
+
+              <button type="submit">Adicionar Golo</button>
+            </form>
+            <form action="/games/end">
+              <h2>Acabar Jogo</h2>
+              <button type="submit">Acabar Jogo</button>
+            </form>
+        </div>
+        <div th:if = "${error!=null}">
+          <p th:text="${error}"></p>
+        </div>
+    </div>
+
+
+  <div class="container">
+    <h2>Filtrar Jogos</h2>
+    <form action="/games/filter" method="GET">
+      <label for="status">Estado do Jogo:</label>
+      <select id="status" name="status">
+        <option value="">Selecione</option>
+        <option value="finished">Terminado</option>
+        <option value="unfinished">A decorrer</option>
+      </select>
+
+      <label for="goals">Golos:</label>
+      <input type="number" id="goals" name="goals">
+
+      <label for="city">Cidade:</label>
+      <input type="text" id="city" name="city">
+      <label for="city">Estádio:</label>
+      <input type="text" id="address" name="address">
+
+      <label for="shift">Turno do Jogo:</label>
+      <select id="shift" name="shift">
+        <option value="">Selecione</option>
+        <option value="morning">Manhã</option>
+        <option value="afternoon">Tarde</option>
+        <option value="night">Noite</option>
+      </select>
+
+      <button type="submit">Filtrar</button>
+    </form>
+  </div>
+
+  <div class="container">
+    <h2>Campeonatos Filtrados</h2>
+    <table>
+          <thead>
+            <tr>
+              <th>Id</th>
+              <th>Equipas</th>
+              <th>Golos por Jogador</th>
+              <th>Total de golos</th>
+              <th>Localização</th>
+              <th>Turno</th>
+              <th>Estado</th>
+            </tr>
+          </thead>
+            <tbody th:each="game : ${filteredGames}">
+              <tr th:each="team, iterStat : ${game.startingTeams}">
+                <td th:if="${iterStat.index == 0}" th:rowspan="${#lists.size(game.startingTeams)}"
+                    th:text="${game.id}"></td>
+
+                <td th:text="${team.team.name}"></td>
+
+                <!-- Gols por jogador -->
+                <td>
+                  <div th:if="${iterStat.index == 0}" th:each="entry : ${game.stats.goalsHomeTeam}">
+                    <span th:text="${playersMap[game.id][entry.key]} + ' - ' + ${entry.value} + ' gol(s)'"></span>
+                  </div>
+                  <div th:if="${iterStat.index != 0}" th:each="entry : ${game.stats.goalsAwayTeam}">
+                    <span th:text="${playersMap[game.id][entry.key]} + ' - ' + ${entry.value} + ' gol(s)'"></span>
+                  </div>
+                </td>
+
+                <!-- Totais -->
+                <td th:if="${iterStat.index == 0}" th:text="${homeGoalsMap[game.id]}"></td>
+                <td th:if="${iterStat.index != 0}" th:text="${awayGoalsMap[game.id]}"></td>
+
+                <!-- Localização -->
+                <td th:if="${iterStat.index == 0}" th:rowspan="${#lists.size(game.startingTeams)}"
+                    th:text="${game.location.city + ' - ' + game.location.address}"></td>
+
+                <!-- Turno -->
+                <td th:if="${iterStat.index == 0}" th:rowspan="${#lists.size(game.startingTeams)}"
+                    th:text="${game.gameShift}"></td>
+
+                <!-- Status -->
+                <td th:if="${iterStat.index == 0}" th:rowspan="${#lists.size(game.startingTeams)}"
+                    th:text="${game.isFinished} ? 'Terminado' : 'A decorrer'"></td>
+              </tr>
+            </tbody>
+
+        </table>
+  </div>
+<script>
+  document.getElementById('team').addEventListener('change', function() {
+      var teamId = this.value;
+      var playerSelect = document.getElementById('player');
+      playerSelect.innerHTML = '<option value="">A carregar...</option>';
+
+      if (teamId) {
+          fetch('/games/startingTeamPlayers?startingTeamId=' + teamId)
+              .then(response => response.json())
+              .then(players => {
+                  playerSelect.innerHTML = '<option value="">Selecione</option>';
+                  players.forEach(function(player) {
+                      playerSelect.innerHTML += '<option value="' + player.id + '">' + player.name + '</option>';
+                  });
+              })
+              .catch(() => {
+                  playerSelect.innerHTML = '<option value="">Erro ao carregar jogadores</option>';
+              });
+      } else {
+          playerSelect.innerHTML = '<option value="">Selecione uma equipa primeiro</option>';
+      }
+  });
+</script>
+</body>
+</html>

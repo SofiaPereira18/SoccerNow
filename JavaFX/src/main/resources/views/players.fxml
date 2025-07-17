@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<StackPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="pt.ul.fc.css.soccernow.controllers.PlayerController">
+
+    <VBox alignment="CENTER" spacing="20">
+        <Button mnemonicParsing="false" onAction="#goBack" style="-fx-background-radius: 5; -fx-padding: 5 10;" text="Voltar" />
+
+        <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Criar Jogador" />
+        <!-- criar jogador -->
+        <HBox alignment="CENTER" spacing="10">
+            <Label text="Primeiro Nome" />
+            <TextField fx:id="firstNameFieldCreate" promptText="Digite o primeiro nome" />
+            <Label text="Último Nome" />
+            <TextField fx:id="lastNameFieldCreate" promptText="Digite o último nome" />
+            <Label text="Posição" />
+            <ComboBox fx:id="positionComboBoxCreate" />
+            <Label text="Equipas" />
+            <TextField fx:id="teamsFieldCreate" promptText="Digite o Id das equipas" />
+            <Label text="Onze iniciais" />
+            <TextField fx:id="startingTeamsFieldCreate" promptText="Digite o Id dos onze iniciais" />
+            <Button onAction="#createPlayer" text="Criar Jogador" />
+        </HBox>
+
+        <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Atualizar Jogador" />
+        <!-- atualizar jogador -->
+        <HBox alignment="CENTER" spacing="10">
+            <Label text="Id" />
+            <TextField fx:id="idFieldUpdate" promptText="Digite o id do jogador a atualizar" />
+            <Label text="Primeiro Nome" />
+            <TextField fx:id="firstNameFieldUpdate" promptText="Digite o primeiro nome" />
+            <Label text="Último Nome" />
+            <TextField fx:id="lastNameFieldUpdate" promptText="Digite o último nome" />
+            <Label text="Posição" />
+            <ComboBox fx:id="positionComboBoxUpdate" />
+            <Label text="Equipas" />
+            <TextField fx:id="teamsFieldUpdate" promptText="Digite o Id das equipas" />
+            <Label text="Onze iniciais" />
+            <TextField fx:id="startingTeamsFieldUpdate" promptText="Digite o Id dos onze iniciais" />
+            <Button onAction="#updatePlayer" text="Atualizar Jogador" />
+        </HBox>
+
+        <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Eliminar Jogador" />
+        <!-- eliminar jogador -->
+        <HBox alignment="CENTER" spacing="10">
+            <Label text="Id" />
+            <TextField fx:id="idFieldDelete" promptText="Digite o id do jogador a eliminar" />
+            <Button onAction="#deletePlayer" text="Eliminar Jogador" />
+        </HBox>
+
+        <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Verificar Jogador" />
+        <!-- verificar jogador -->
+        <HBox alignment="CENTER" spacing="10">
+            <Label text="Id" />
+            <TextField fx:id="idFieldView" promptText="Digite o id do jogador a verificar" />
+            <Button onAction="#verifyPlayer" text="Verificar Jogador" />
+        </HBox>
+
+        <!-- tabela para exibir os dados do jogador -->
+        <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Dados do Jogador" />
+        <TableView fx:id="playerDataTable" prefHeight="400.0" prefWidth="800.0">
+            <columns>
+                <TableColumn fx:id="idColumn" prefWidth="50.0" text="ID" />
+                <TableColumn fx:id="firstNameColumn" prefWidth="100.0" text="Primeiro Nome" />
+                <TableColumn fx:id="lastNameColumn" prefWidth="100.0" text="Ultimo Nome" />
+                <TableColumn fx:id="typeUserColumn" prefWidth="120.0" text="Tipo de utilizador" />
+
+                <TableColumn fx:id="positionColumn" prefWidth="100.0" text="Posição" />
+                <TableColumn fx:id="teamsColumn" prefWidth="100.0" text="Equipas" />
+                <TableColumn fx:id="totalGoalsColumn" prefWidth="60.0" text="Golos" />
+                <TableColumn fx:id="totalCardsColumn" prefWidth="77.0" text="Cartões" />
+
+                <TableColumn fx:id="totalMatchesColumn" prefWidth="63.0" text="Jogos" />
+                <TableColumn fx:id="hasCertificateColumn" prefWidth="129.0" text="Certificado?" />
+                <TableColumn fx:id="refereeTeamsColumn" prefWidth="165.0" text="Equipas de árbitros" />
+            </columns>
+        </TableView>
+
+    </VBox>
+
+    <padding>
+        <Insets bottom="20" left="20" right="20" top="20" />
+    </padding>
+</StackPane>

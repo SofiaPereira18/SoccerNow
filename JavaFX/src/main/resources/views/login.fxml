@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Pos?>
+<?import javafx.geometry.Insets?>
+
+<StackPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="pt.ul.fc.css.soccernow.controllers.LoginController">
+    <children>
+        <VBox alignment="CENTER" spacing="20" layoutX="200.0" layoutY="150.0">
+            <Label text="Soccer Now" style="-fx-font-size: 28px; -fx-font-weight: bold;"/>
+
+            <TextField fx:id="usernameField" promptText="Utilizador" />
+            <PasswordField fx:id="passwordField" promptText="Password" />
+            <Button text="Login" onAction="#handleLogin"/>
+            <Label fx:id="errorMessage" textFill="red" visible="false"/>
+        </VBox>
+    </children>
+
+    <padding>
+        <Insets top="10" left="10" right="10" bottom="10"/>
+    </padding>
+</StackPane>

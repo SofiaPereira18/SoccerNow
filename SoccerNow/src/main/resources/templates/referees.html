@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <title>Soccer Now - Gestão de Arbitros</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+
+    h1, h2 {
+      color: #333;
+    }
+
+    .container {
+      background-color: #f9f9f9;
+      padding: 20px;
+      margin-bottom: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    input, select, button {
+      margin: 10px 0;
+      padding: 8px;
+      width: 100%;
+      max-width: 400px;
+      display: block;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+
+    th, td {
+      padding: 10px;
+      border: 1px solid #ccc;
+      text-align: center;
+    }
+
+    .danger {
+      color: red;
+    }
+
+    .back-button {
+      background-color: #007BFF;
+      color: white;
+      padding: 10px;
+      margin-bottom: 5px;
+    }
+  </style>
+</head>
+<body>
+    <a href="/home" class="back-button">Página inicial</a>
+    <h1>Gestão de Árbitros</h1>
+    
+    <div class="container">
+      <h2>Filtrar Arbitros</h2>
+      <form action="/referees/filter" method="GET">
+        <label for="firstName">Nome próprio do Arbitro:</label>
+        <input type="text" id="firstName" name="firstName">
+
+        <label for="lastName">Último nome do Arbitro:</label>
+        <input type="text" id="lastName" name="lastName">
+
+        <label for="position">Tem certificado:</label>
+        <select id="position" name="position">
+          <option value="">Selecione</option>
+          <option value="true">Sim</option>
+          <option value="false">Não</option>
+        </select>
+
+        <label for="cards">Número de Cartões:</label>
+        <input type="number" id="cards" name="cards">
+
+        <label for="games">Número de Jogos:</label>
+        <input type="number" id="games" name="games">
+
+        <button type="submit">Filtrar</button>
+      </form>
+    </div>
+
+    <div class="container">
+      <h2>Árbitros Filtrados</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Tem certificado?</th>
+            <th>Número de jogos oficiados</th>
+            <th>Número de cartões mostrados</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="referee : ${filtered}">
+            <td th:text="${referee.firstName + ' ' + referee.lastName}"></td>
+            <td th:text="${referee.hasCertificate ? 'Sim' : 'Não'}"></td>
+            <td th:text="${referee.totalMatches}"></td>
+            <td th:text="${referee.totalCards}"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </body>
+</html>

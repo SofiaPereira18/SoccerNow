@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="pt">
+  <head>
+    <meta charset="UTF-8">
+    <title>Soccer Now - Gestão de Equipas</title>
+    <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+
+    h1, h2 {
+      color: #333;
+    }
+
+    .container {
+      padding: 20px;
+      margin-bottom: 30px;
+      border-radius: 8px;
+    }
+
+    input, select, button {
+      margin: 10px 0;
+      padding: 8px;
+      width: 100%;
+      max-width: 400px;
+      display: block;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+
+    th, td {
+      padding: 10px;
+      border: 1px solid #ccc;
+      text-align: center;
+    }
+
+    .danger {
+      color: red;
+    }
+
+    .back-button {
+      background-color: #007BFF;
+      color: white;
+      padding: 10px;
+      margin-bottom: 5px;
+    }
+  </style>
+  </head>
+<body>
+  <a href="/home" class="back-button">Página inicial</a>
+  <h1>Gestão de Equipas</h1>
+
+  <div class="filter-container">
+    <h2>Buscar por Equipas</h2>
+    <form action="/teams/search" method="GET">
+      <label for="searchId">Pesquisar por ID da Equipa:</label><br>
+      <input type="number" id="searchId" name="searchId" placeholder="ID da Equipa" required><br><br>
+      <button type="submit">Buscar</button>
+    </form>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Jogadores</th>
+          <th>Vitorias</th>
+          <th>Derrotas</th>
+          <th>Empates</th>
+          <th>Conquistas</th>
+        </tr>
+      </thead>
+      <tbody th:if="${team != null}">
+        <!-- Caso tenha conquistas -->
+        <tr th:each="podium, iterStat : ${pp}" 
+            th:if="${pp != null and !#lists.isEmpty(pp)}">
+          <td th:if="${iterStat.index == 0}" th:rowspan="${pp.size()}" th:text="${team.name}"></td>
+          <td th:if="${iterStat.index == 0}" th:rowspan="${pp.size()}" th:text="${pSize}"></td>
+          <td th:if="${iterStat.index == 0}" th:rowspan="${pp.size()}" th:text="${victories}"></td>
+          <td th:if="${iterStat.index == 0}" th:rowspan="${pp.size()}" th:text="${losses}"></td>
+          <td th:if="${iterStat.index == 0}" th:rowspan="${pp.size()}" th:text="${draws}"></td>
+          <td th:text="${podium.championship.name +': '+ podium.pos}"></td>
+        </tr>
+        <!-- Caso não tenha conquistas -->
+        <tr th:if="${pp == null or #lists.isEmpty(pp)}">
+          <td th:text="${team.name}"></td>
+          <td th:text="${pSize}"></td>
+          <td th:text="${victories}"></td>
+          <td th:text="${losses}"></td>
+          <td th:text="${draws}"></td>
+          <td>-</td>
+        </tr>
+      </tbody>
+    </table>
+    <div th:if="${team == null}">
+      <p style="text-align:center; color:#000000;">Nenhuma equipa selecionada.</p>
+    </div>
+  </div>
+
+  <div class="container">
+    <h2>Filtrar Equipas</h2>
+    <form action="/teams/filter" method="GET">
+      <label for="name">Nome da Equipa:</label>
+      <input type="text" id="name" name="name">
+
+      <label for="players">Número de Jogadores:</label>
+      <input type="number" id="players" name="players">
+
+      <label for="victories">Número de Vitórias:</label>
+      <input type="number" id="victories" name="victories">
+
+      <label for="losses">Número de Derrotas:</label>
+      <input type="number" id="losses" name="losses">
+
+      <label for="draws">Número de Empates:</label>
+      <input type="number" id="draws" name="draws">
+
+      <label for="status">Conquista:</label>
+      <select id="status" name="status">
+        <option value="">Selecione</option>
+        <option value="first">Primeiro</option>
+        <option value="second">Segundo</option>
+        <option value="third">Terceiro</option>
+      </select>
+
+      <button type="submit">Filtrar</button>
+    </form>
+  </div>
+
+  <div class="container">
+    <h2>Equipas Filtrados</h2>
+    <table>
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Jogadores</th>
+              <th>Vitorias</th>
+              <th>Derrotas</th>
+              <th>Empates</th>
+              <th>Conquistas</th>
+            </tr>
+          </thead>
+            <tbody th:if="${filteredTeams != null}">
+              <tr th:each="team : ${filteredTeams}">
+                <td th:text="${team.name}"></td>
+                <td th:text="${team.players != null ? team.players.size() : 0}"></td>
+                <td th:text="${victories[team.id]}"></td>
+                <td th:text="${losses[team.id]}"></td>
+                <td th:text="${draws[team.id]}"></td>
+                <td>
+                  <span th:if="${team.podiumPositions != null and !#lists.isEmpty(team.podiumPositions)}">
+                    <span th:each="podium : ${team.podiumPositions}">
+                      <span th:text="${podium.championship.name + ': ' + podium.pos}"></span><br/>
+                    </span>
+                  </span>
+                  <span th:if="${team.podiumPositions == null or #lists.isEmpty(team.podiumPositions)}">-</span>
+                </td>
+              </tr>
+            </tbody>
+        </table>
+  </div>
+</body>
+</html>

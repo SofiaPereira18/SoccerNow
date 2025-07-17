@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Pos?>
+<?import javafx.geometry.Insets?>
+<?import javafx.collections.FXCollections?>
+
+<StackPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="pt.ul.fc.css.soccernow.controllers.RefereeController">
+
+    <VBox spacing="20" alignment="CENTER">
+        <Button text="Voltar" onAction="#goBack" style="-fx-background-radius: 5; -fx-padding: 5 10;" />
+
+        <Label text="Criar Árbitro" style="-fx-font-size: 16px; -fx-font-weight: bold;" />
+        <!-- criar arbitro -->
+        <HBox spacing="10" alignment="CENTER">
+            <Label text="Primeiro Nome" />
+            <TextField fx:id="firstNameFieldCreate" promptText="Digite o primeiro nome" />
+            <Label text="Último Nome" />
+            <TextField fx:id="lastNameFieldCreate" promptText="Digite o último nome" />
+            <Label text="Tem certificado?" />
+            <ComboBox fx:id="hasCertificateComboCreate" />
+            <Label text="Equipas" />
+            <TextField fx:id="teamsFieldCreate" promptText="Digite o Id das equipas" />
+            <Button text="Criar Árbitro" onAction="#createReferee" />
+        </HBox>
+
+        <Label text="Atualizar Árbitro" style="-fx-font-size: 16px; -fx-font-weight: bold;" />
+        <!-- atualizar arbitro -->
+        <HBox spacing="10" alignment="CENTER">
+            <Label text="Id" />
+            <TextField fx:id="idFieldUpdate" promptText="Digite o id do árbitro a atualizar" />
+            <Label text="Primeiro Nome" />
+            <TextField fx:id="firstNameFieldUpdate" promptText="Digite o primeiro nome" />
+            <Label text="Último Nome" />
+            <TextField fx:id="lastNameFieldUpdate" promptText="Digite o último nome" />
+            <Label text="Tem certificado?" />
+            <ComboBox fx:id="hasCertificateComboUpdate" />
+            <Label text="Equipas" />
+            <TextField fx:id="teamsFieldUpdate" promptText="Digite o Id das equipas" />
+            <Button text="Atualizar Árbitro" onAction="#updateReferee" />
+        </HBox>
+
+        <Label text="Eliminar Árbitro" style="-fx-font-size: 16px; -fx-font-weight: bold;" />
+        <!-- eliminar arbitro -->
+        <HBox spacing="10" alignment="CENTER">
+            <Label text="Id" />
+            <TextField fx:id="idFieldDelete" promptText="Digite o id do árbitro a eliminar" />
+            <Button text="Eliminar Árbitro" onAction="#deleteReferee" />
+        </HBox>
+
+        <Label text="Verificar Árbitro" style="-fx-font-size: 16px; -fx-font-weight: bold;" />
+        <!-- verificar arbitro -->
+        <HBox spacing="10" alignment="CENTER">
+            <Label text="Id" />
+            <TextField fx:id="idFieldView" promptText="Digite o id do árbitro a verificar" />
+            <Button text="Verificar Árbitro" onAction="#verifyReferee" />
+        </HBox>
+
+         <!-- tabela para exibir os dados do arbitro -->
+        <Label text="Dados do Arbitro" style="-fx-font-size: 16px; -fx-font-weight: bold;" />
+        <TableView fx:id="refereeDataTable" prefHeight="400.0" prefWidth="800.0">
+            <columns>
+                <TableColumn fx:id="idColumn" text="ID" prefWidth="50.0"/>
+                <TableColumn fx:id="firstNameColumn" text="Primeiro Nome" prefWidth="100.0"/>
+                <TableColumn fx:id="lastNameColumn" text="Ultimo Nome" prefWidth="100.0"/>
+                <TableColumn fx:id="typeUserColumn" text="Tipo de utilizador" prefWidth="100.0"/>
+
+                <TableColumn fx:id="positionColumn" text="Posição" prefWidth="100.0"/>
+                <TableColumn fx:id="teamsColumn" text="Equipas" prefWidth="100.0"/>
+                <TableColumn fx:id="totalGoalsColumn" text="Golos" prefWidth="60.0"/>
+                <TableColumn fx:id="totalCardsColumn" text="Cartões" prefWidth="60.0"/>
+
+                <TableColumn fx:id="totalMatchesColumn" text="Jogos" prefWidth="80.0"/>
+                <TableColumn fx:id="hasCertificateColumn" text="Certificado?" prefWidth="90.0"/>
+                <TableColumn fx:id="refereeTeamsColumn" text="Equipas de árbitros" prefWidth="150.0"/>
+            </columns>
+        </TableView>
+
+    </VBox>
+
+    <padding>
+        <Insets top="20" left="20" right="20" bottom="20"/>
+    </padding>
+
+</StackPane>

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <title>Soccer Now - Gestão de Campeonatos</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+
+    h1, h2 {
+      color: #333;
+    }
+
+    .container {
+      padding: 20px;
+      margin-bottom: 30px;
+      border-radius: 8px;
+    }
+
+    input, select, button {
+      margin: 10px 0;
+      padding: 8px;
+      width: 100%;
+      max-width: 400px;
+      display: block;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+
+    th, td {
+      padding: 10px;
+      border: 1px solid #ccc;
+      text-align: center;
+    }
+
+    .danger {
+      color: red;
+    }
+
+    .back-button {
+      background-color: #007BFF;
+      color: white;
+      padding: 10px;
+      margin-bottom: 5px;
+    }
+  </style>
+</head>
+<body>
+  <a href="/home" class="back-button">Página inicial</a>
+
+  <h1>Gestão de Campeonatos</h1>
+    <div class="filter-container">
+        <h2>Buscar por Campeonatos</h2>
+        <form action="/championships/search" method="GET">
+            <label for="searchId">Pesquisar por ID do Campeonato:</label><br>
+            <input type="number" id="searchId" name="searchId" placeholder="ID Campeonato" required><br><br>
+            <button type="submit">Buscar</button>
+        </form>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Equipas</th>
+              <th>Pontos</th>
+              <th>Estado</th>
+              <th>Pódio</th>
+            </tr>
+          </thead>
+            <tbody th:each="championship : ${championships}">
+              <tr th:if="${championship.teams != null and !#lists.isEmpty(championship.teams)}"
+                  th:each="team, iterStat : ${championship.teams}">
+
+                <!-- Only show the name once -->
+                <td th:if="${iterStat.index == 0}"
+                    th:rowspan="${#lists.size(championship.teams)}"
+                    th:text="${championship.name}"></td>
+
+                <td th:text="${team.name}"></td>
+
+                <td th:if="${championship instanceof T(pt.ul.fc.css.soccernow.business.entities.ChampionshipByPoints)}"
+                    th:text="${championship.pointsByTeam[team.id]}"></td>
+
+                <td th:if="${iterStat.index == 0}"
+                    th:rowspan="${#lists.size(championship.teams)}"
+                    th:text="${championship.isFinished} ? 'Terminado' : 'A decorrer'">
+                </td>
+
+               <td th:if="${iterStat.index == 0}"
+                    th:rowspan="${#lists.size(championship.teams)}">
+                    <div th:if="${championship.isFinished}">
+                        <ul style="list-style-type: none; padding-left: 0; margin: 0;">
+                            <li th:each="pos : ${championship.podiumPositions}">
+                                <span th:if="${pos.pos == T(pt.ul.fc.css.soccernow.business.entities.PodiumPosition.Position).FIRST}">🥇</span>
+                                <span th:if="${pos.pos == T(pt.ul.fc.css.soccernow.business.entities.PodiumPosition.Position).SECOND}">🥈</span>
+                                <span th:if="${pos.pos == T(pt.ul.fc.css.soccernow.business.entities.PodiumPosition.Position).THIRD}">🥉</span>
+                                <span th:text="${pos.team.name}"></span>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+
+
+              </tr>
+
+              <!-- If there are no teams -->
+              <tr th:if="${championship.teams == null or #lists.isEmpty(championship.teams)}">
+                <td th:text="${championship.name}"></td>
+                <td colspan="4">Sem equipas</td>
+              </tr>
+            </tbody>
+
+        </table>
+    </div>
+
+
+  <div class="container">
+    <h2>Filtrar Campeonatos</h2>
+    <form action="/championships/filter" method="GET">
+      <label for="name">Nome do Campeonato:</label>
+      <input type="text" id="name" name="name">
+
+      <label for="team">Equipa:</label>
+      <input type="text" id="team" name="team">
+
+      <label for="finishedGames">Número de Jogos Realizados:</label>
+      <input type="number" id="finishedGames" name="finishedGames">
+
+      <label for="unfinishedGames">Número de Jogos por realizar:</label>
+      <input type="number" id="unfinishedGames" name="unfinishedGames">
+
+      <label for="status">Estado do Campeonato:</label>
+      <select id="status" name="status">
+        <option value="">Selecione</option>
+        <option value="finished">Terminado</option>
+        <option value="unfinished">A decorrer</option>
+      </select>
+
+      <button type="submit">Filtrar</button>
+    </form>
+  </div>
+
+  <div class="container">
+    <h2>Campeonatos Filtrados</h2>
+    <table>
+          <thead>
+            <tr>
+              <th>Id</th>
+              <th>Nome</th>
+              <th>Equipas</th>
+              <th>Pontos</th>
+              <th>Estado</th>
+              <th>Pódio</th>
+            </tr>
+          </thead>
+            <tbody th:each="championship : ${filteredChampionships}">
+              <tr th:if="${championship.teams != null and !#lists.isEmpty(championship.teams)}"
+                  th:each="team, iterStat : ${championship.teams}">
+
+                <td th:text="${championship.id}"></td>
+
+                <td th:if="${iterStat.index == 0}"
+                    th:rowspan="${#lists.size(championship.teams)}"
+                    th:text="${championship.name}"></td>
+
+                <td th:text="${team.name}"></td>
+
+                <td th:if="${championship instanceof T(pt.ul.fc.css.soccernow.business.entities.ChampionshipByPoints)}"
+                    th:text="${championship.pointsByTeam[team.id]}"></td>
+
+                <td th:if="${iterStat.index == 0}"
+                    th:rowspan="${#lists.size(championship.teams)}"
+                    th:text="${championship.isFinished} ? 'Terminado' : 'A decorrer'">
+                </td>
+
+               <td th:if="${iterStat.index == 0}"
+                    th:rowspan="${#lists.size(championship.teams)}">
+                    <div th:if="${championship.isFinished}">
+                        <ul style="list-style-type: none; padding-left: 0; margin: 0;">
+                            <li th:each="pos : ${championship.podiumPositions}">
+                                <span th:if="${pos.pos == T(pt.ul.fc.css.soccernow.business.entities.PodiumPosition.Position).FIRST}">🥇</span>
+                                <span th:if="${pos.pos == T(pt.ul.fc.css.soccernow.business.entities.PodiumPosition.Position).SECOND}">🥈</span>
+                                <span th:if="${pos.pos == T(pt.ul.fc.css.soccernow.business.entities.PodiumPosition.Position).THIRD}">🥉</span>
+                                <span th:text="${pos.team.name}"></span>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+
+
+              </tr>
+
+              <!-- If there are no teams -->
+              <tr th:if="${championship.teams == null or #lists.isEmpty(championship.teams)}">
+                <td th:text="${championship.id}"></td>
+                <td th:text="${championship.name}"></td>
+                <td colspan="4">Sem equipas</td>
+              </tr>
+            </tbody>
+
+        </table>
+  </div>
+
+</body>
+</html>

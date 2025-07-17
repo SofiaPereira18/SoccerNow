@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <title>Soccer Now - Gestão de Jogadores</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+
+    h1, h2 {
+      color: #333;
+    }
+
+    .container {
+      padding: 20px;
+      margin-bottom: 30px;
+      border-radius: 8px;
+    }
+
+    input, select, button {
+      margin: 10px 0;
+      padding: 8px;
+      width: 100%;
+      max-width: 400px;
+      display: block;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+
+    th, td {
+      padding: 10px;
+      border: 1px solid #ccc;
+      text-align: center;
+    }
+
+    .danger {
+      color: red;
+    }
+
+    .back-button {
+      background-color: #007BFF;
+      color: white;
+      padding: 10px;
+      margin-bottom: 5px;
+    }
+  </style>
+</head>
+<body>
+  <a href="/home" class="back-button">Página inicial</a>
+
+  <h1>Gestão de Jogadores</h1>
+    <div th:if="${inactivePlayer}" class="alert" style="color: red; padding: 10px; margin: 10px 0; border: 1px solid red;">
+      Este jogador está inativo e não pode ser visualizado.
+    </div>
+
+    <div class="filter-container">
+        <h2>Buscar por Jogadores</h2>
+        <form action="/players/search" method="GET">
+            <label for="searchId">Pesquisar por ID do Jogador:</label><br>
+            <input type="number" id="searchId" name="searchId" placeholder="ID do Jogador" required><br><br>
+            <button type="submit">Buscar</button>
+        </form>
+
+        <table>
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>Posição</th>
+              </tr>
+            </thead>
+            <tbody>
+                <tr th:if="${player != null}">
+                  <td th:text="${player.firstName + ' ' + player.lastName}"></td>
+                  <td th:text="${player.position}"></td>
+                </tr>
+              </tbody>
+          </table>
+    </div>
+
+
+  <div class="container">
+    <h2>Filtrar Jogadores</h2>
+    <form action="/players/filter" method="GET">
+      <label for="firstName">Nome próprio do Jogador:</label>
+      <input type="text" id="firstName" name="firstName">
+
+      <label for="lastName">Último nome do Jogador:</label>
+      <input type="text" id="lastName" name="lastName">
+
+      <label for="position">Posição:</label>
+      <select id="position" name="position">
+        <option value="">Selecione</option>
+        <option value="OTHER">Outro</option>
+        <option value="GOALKEEPER">Guarda-redes</option>
+      </select>
+
+      <label for="goals">Número de Golos:</label>
+      <input type="number" id="goals" name="goals">
+
+      <label for="cards">Número de Cartões:</label>
+      <input type="number" id="cards" name="cardsGoal">
+
+      <label for="games">Número de Jogos:</label>
+      <input type="number" id="games" name="games">
+
+      <button type="submit">Filtrar</button>
+    </form>
+  </div>
+
+  <div class="container">
+    <h2>Jogadores Filtrados</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Posição</th>
+          <th>Golos</th>
+          <th>Cartões</th>
+          <th>Jogos</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="player : ${filteredPlayers}">
+          <td th:text="${player.firstName + ' ' + player.lastName}"></td>
+          <td th:text="${player.position != null ? player.position : ''}"></td>
+          <td th:text="${player.totalGoals}"></td>
+          <td th:text="${player.totalCards}"></td>
+          <td th:text="${player.totalMatches}"></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</body>
+</html>

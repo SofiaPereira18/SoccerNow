@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<ScrollPane fitToWidth="true" prefHeight="1093.0" prefWidth="1194.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pt.ul.fc.css.soccernow.controllers.ChampionshipController">
+    <content>
+        <StackPane alignment="CENTER" prefHeight="1168.0" prefWidth="1178.0">
+            <VBox alignment="CENTER" maxWidth="1133.0" prefHeight="1027.0" prefWidth="1133.0" spacing="40">
+                 <!--Voltar ao menu home-->
+                    <Button fx:id="backToHomeMenuButton" layoutX="14.0" layoutY="14.0" onAction="#backToHomeMenu" text="Voltar" />
+                <!-- CREATE CHAMPIONSHIP SECTION -->
+                <VBox alignment="CENTER" spacing="20">
+                    <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Criar Campeonatos" textAlignment="CENTER" />
+                    <HBox alignment="CENTER" spacing="10">
+                        <Label text="Nome" />
+                        <TextField fx:id="championshipName" promptText="Nome do campeonato" />
+                        <Label text="Equipas" />
+                        <TextField fx:id="teamsChampionship" promptText="Equipas (separados por vírgula)" />
+                        <Button fx:id="createChampionshipButton" onAction="#createChampionship" text="Criar Campeonato" textFill="#10c925" />
+                    </HBox>
+                </VBox>
+
+                <!-- UPDATE CHAMPIONSHIP SECTION -->
+                <VBox alignment="CENTER" maxWidth="794.0" prefHeight="492.0" prefWidth="794.0" spacing="16">
+                    <!-- Title -->
+                    <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Atualizar Campeonatos" />
+
+                    <!-- Championship ID -->
+                    <HBox alignment="CENTER" spacing="10">
+                        <Label minWidth="150" text="Id do Campeonato" />
+                        <TextField fx:id="championshipId" prefHeight="24.0" prefWidth="158.0" promptText="Ex: 101" />
+                        <Button fx:id="finishChampionshipButton" onAction="#handleFinishChampionship" prefHeight="24.0" prefWidth="177.0" text="Terminar Campeonato" />
+
+                        <Label>
+                            <graphic>
+                                <ImageView fitHeight="25.0" fitWidth="25.0">
+                                    <image>
+                                        <Image url="@info2.png" />
+                                    </image>
+                                </ImageView>
+                            </graphic>
+                            <tooltip>
+                                <Tooltip text="O campeonato só pode ser terminado quando todos os seus jogos tiverem terminado." />
+                            </tooltip>
+                        </Label>
+                    </HBox>
+
+                    <!-- Equipas Section -->
+                    <TitledPane expanded="true" text="Gestão de Equipas">
+                        <VBox spacing="10">
+                            <padding>
+                                <Insets bottom="10" left="10" right="10" top="10" />
+                            </padding>
+                            <HBox spacing="10">
+                                <Label minWidth="150" text="Adicionar Equipas" />
+                                <TextField fx:id="newTeams" promptText="Ex: Benfica, Porto" />
+                                <Button fx:id="addTeamsButton" onAction="#handleAddTeams" text="Adicionar" />
+                            </HBox>
+                            <HBox spacing="10">
+                                <Label minWidth="150" text="Remover Equipas" />
+                                <TextField fx:id="deletedTeams" promptText="Ex: Braga, Sporting" />
+                                <Button fx:id="removeTeamsButton" onAction="#handleRemoveTeams" text="Remover" />
+                            </HBox>
+                        </VBox>
+                    </TitledPane>
+
+                    <!-- Jogos Section -->
+                    <TitledPane contentDisplay="CENTER" expanded="true" nodeOrientation="LEFT_TO_RIGHT" text="Adicionar Jogos">
+                        <VBox alignment="CENTER" prefHeight="122.0" prefWidth="804.0" spacing="10">
+                            <padding>
+                                <Insets bottom="10" left="10" right="10" top="10" />
+                            </padding>
+                            <HBox alignment="CENTER" spacing="10">
+                                <Label minWidth="102.0" prefHeight="16.0" prefWidth="102.0" text="Equipa da Casa" />
+                                <TextField fx:id="team1Name" promptText="Casa" />
+                                <Label minWidth="107.0" prefHeight="16.0" prefWidth="107.0" text="Equipa de Fora" />
+                                <TextField fx:id="team2Name" promptText="Fora" />
+                                <Label minWidth="165.0" prefHeight="16.0" prefWidth="165.0" text="Id da equipa de árbitros" />
+                                <TextField fx:id="refereeTeamId" promptText="Ex: 9" />
+                            </HBox>
+                            <HBox alignment="CENTER" spacing="10" />
+                            <HBox alignment="CENTER" spacing="10">
+                                <Label minWidth="91.0" prefHeight="16.0" prefWidth="91.0" text="Data do Jogo" />
+                                <DatePicker fx:id="gameDate" />
+                                <Label minWidth="39.0" prefHeight="16.0" prefWidth="39.0" text="Hora" />
+                                <TextField fx:id="gameTime" promptText="15:30" />
+                            </HBox>
+                            <Button fx:id="addGameButton" alignment="CENTER" contentDisplay="CENTER" onAction="#handleAddGame" prefHeight="24.0" prefWidth="162.0" text="Adicionar Jogo" />
+                        </VBox>
+                    </TitledPane>
+
+                    <!-- Cancelar Jogo -->
+                    <TitledPane expanded="true" text="Cancelar Jogo">
+                        <HBox spacing="10">
+                            <padding>
+                                <Insets bottom="10" left="10" right="10" top="10" />
+                            </padding>
+                            <Label minWidth="84.0" prefHeight="16.0" prefWidth="84.0" text="Id do Jogo" />
+                            <TextField fx:id="gameIdToRemove" promptText="Ex: 203" />
+                            <Button fx:id="removeGameButton" onAction="#handleRemoveGame" text="Remover Jogo" />
+                        </HBox>
+                    </TitledPane>
+                    <Button fx:id="deleteChampionshipButton" contentDisplay="CENTER" onAction="#deleteChampionship" prefHeight="24.0" prefWidth="345.0" text="Eliminar Campeonato" textAlignment="RIGHT" textFill="#e40303">
+                  <font>
+                     <Font size="16.0" />
+                  </font></Button>
+                </VBox>
+                 <TableView fx:id="championshipTable" prefHeight="282.0" prefWidth="1112.0" VBox.vgrow="NEVER">
+                     <columns>
+                         <TableColumn fx:id="idColumn" prefWidth="60.0" text="ID" />
+                         <TableColumn fx:id="nameColumn" prefWidth="142.0" text="Nome" />
+                         <TableColumn fx:id="teamsColumn" prefWidth="195.0" text="Equipas" />
+                         <TableColumn fx:id="gamesColumn" prefWidth="425.0" text="Jogos" />
+                         <TableColumn fx:id="statusColumn" prefWidth="144.0" text="Estado" />
+                         <TableColumn fx:id="podiumColumn" prefWidth="131.0" text="Pódio" />
+                     </columns>
+                     <columnResizePolicy>
+                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                     </columnResizePolicy>
+                 </TableView>
+            </VBox>
+
+        </StackPane>
+    </content>
+</ScrollPane>
